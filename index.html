@@ -586,6 +586,27 @@ body::before {
 </div>
 
 <script>
+    const socket = io();
+
+// When a user joins a room
+socket.emit('join room', 'room1'); // 'room1' is the room name
+
+// Send a message to the room
+document.getElementById('input').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        const message = e.target.value;
+        socket.emit('chat message', 'room1', message); // Sending to room1
+    }
+});
+
+// Receive messages
+socket.on('chat message', (msg) => {
+    const messagesContainer = document.getElementById('messages');
+    const messageElement = document.createElement('div');
+    messageElement.textContent = msg;
+    messagesContainer.appendChild(messageElement);
+});
+
 const room = new WebsimSocket();
 const chatMessages = document.getElementById('chat-messages');
 const usernameInput = document.getElementById('username-input');
